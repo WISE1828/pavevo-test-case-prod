@@ -2,19 +2,35 @@ import { fetchAnime } from '@/api/fetchAnime'
 import AnimeListItem from '@/components/AnimeListItem'
 import { IAnime } from '@/types/type'
 import React, { useEffect, useState } from 'react'
-import { FlatList, SafeAreaView } from 'react-native'
+import { ActivityIndicator, FlatList, SafeAreaView } from 'react-native'
 import Header from '../components/Header'
 
 const HomeScreen = () => {
 	const [anime, setAnime] = useState<IAnime[]>([])
+	const [page, setPage] = useState(1)
+	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const animeData = await fetchAnime()
-			setAnime(animeData)
-		}
 		fetchData()
-	}, [])
+	}, [page])
+
+	const fetchData = async () => {
+		setLoading(true)
+		try {
+			const animeData = await fetchAnime(page)
+			setAnime(prevAnime => [...prevAnime, ...animeData])
+		} catch (error) {
+			console.error(error)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const handleLoadMore = () => {
+		if (!loading) {
+			setPage(prevPage => prevPage + 1)
+		}
+	}
 
 	return (
 		<>
@@ -24,6 +40,9 @@ const HomeScreen = () => {
 					data={anime}
 					renderItem={({ item }) => <AnimeListItem anime={item} />}
 					keyExtractor={item => item.mal_id.toString()}
+					onEndReached={handleLoadMore}
+					onEndReachedThreshold={0.5}
+					ListFooterComponent={loading ? <ActivityIndicator size="large" color="#3f3f46" /> : null}
 				/>
 			</SafeAreaView>
 		</>
