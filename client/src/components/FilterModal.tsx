@@ -1,24 +1,44 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 import Checkbox from 'expo-checkbox'
-import React from 'react'
+import React, { useState } from 'react'
 import {
 	Modal,
 	Pressable,
 	SafeAreaView,
 	Text,
-	TextInput,
 	View,
 } from 'react-native'
 
 interface ModalProps {
 	modalVisible: boolean
 	setModalVisible: (visible: boolean) => void
+	selectedFilter: string | null
+	setSelectedFilter: (filter: string | null) => void
 }
 
 const FilterModal: React.FC<ModalProps> = ({
 	modalVisible,
 	setModalVisible,
+	selectedFilter,
+	setSelectedFilter,
 }) => {
+	const [localFilter, setLocalFilter] = useState<string | null>(selectedFilter)
+
+	const toggleFilter = (type: string) => {
+		setLocalFilter(prevFilter => (prevFilter === type ? null : type))
+	}
+
+	const applyFilters = () => {
+		setSelectedFilter(localFilter)
+		setModalVisible(false)
+	}
+
+	const resetFilters = () => {
+		setLocalFilter(null)
+		setModalVisible(false)
+		setSelectedFilter(null)
+	}
+
 	return (
 		<Modal
 			animationType='slide'
@@ -34,37 +54,25 @@ const FilterModal: React.FC<ModalProps> = ({
 					<View className='p-1.5 bg-zinc-700 rounded-md'>
 						<Text className='text-white text-lg font-semibold'>Filters</Text>
 					</View>
-					<Pressable>
+					<Pressable onPress={resetFilters}>
 						<Text className='text-zinc-200'>Default</Text>
 					</Pressable>
 				</View>
 				<View className='flex-col mt-5 gap-5 px-3 flex-1'>
 					<View className='gap-5'>
 						<Text className='text-white text-xl font-bold'>Types</Text>
-						<View className='flex-row gap-2 items-center'>
-							<Checkbox />
-							<Text className='text-white text-lg'>TV</Text>
-						</View>
-						<View className='flex-row gap-2 items-center'>
-							<Checkbox />
-							<Text className='text-white text-lg'>Movie</Text>
-						</View>
-						<Text className='text-white text-xl font-bold'>Date</Text>
-						<View className='flex-row gap-3 items-center'>
-							<Text className='text-white text-lg'>From</Text>
-							<TextInput
-								className='h-12 w-32 bg-zinc-700 rounded-xl pl-3 text-white font-normal placeholder:text-zinc-300'
-								placeholder='Year'
-							/>
-							<Text className='text-white text-lg'>To</Text>
-							<TextInput
-								className='h-12 w-32 bg-zinc-700 rounded-xl pl-3 text-white font-normal placeholder:text-zinc-300'
-								placeholder='Year'
-							/>
-						</View>
+						{['tv', 'movie', 'ova', 'special', 'ona', 'music', 'cm', 'pv', 'tv_special'].map(type => (
+							<View key={type} className='flex-row gap-2 items-center'>
+								<Checkbox
+									value={localFilter === type}
+									onValueChange={() => toggleFilter(type)}
+								/>
+								<Text className='text-white text-lg'>{type}</Text>
+							</View>
+						))}
 					</View>
 				</View>
-				<Pressable className='bg-zinc-200 p-3 items-center mb-5 mx-3 rounded-xl'>
+				<Pressable onPress={applyFilters} className='bg-zinc-200 p-3 items-center mb-5 mx-3 rounded-xl'>
 					<Text className='text-lg font-semibold'>Apply</Text>
 				</Pressable>
 			</SafeAreaView>

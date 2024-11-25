@@ -9,16 +9,21 @@ const HomeScreen = () => {
 	const [anime, setAnime] = useState<IAnime[]>([])
 	const [page, setPage] = useState(1)
 	const [loading, setLoading] = useState(false)
+	const [selectedFilter, setSelectedFilter] = useState<string | null>(null)
 
 	useEffect(() => {
 		fetchData()
-	}, [page])
+	}, [page, selectedFilter])
 
 	const fetchData = async () => {
 		setLoading(true)
 		try {
-			const animeData = await fetchAnime(page)
-			setAnime(prevAnime => [...prevAnime, ...animeData])
+			const animeData = await fetchAnime(page, selectedFilter)
+			if (page === 1) {
+				setAnime(animeData)
+			} else {
+				setAnime(prevAnime => [...prevAnime, ...animeData])
+			}
 		} catch (error) {
 			console.error(error)
 		} finally {
@@ -32,9 +37,14 @@ const HomeScreen = () => {
 		}
 	}
 
+	const handleFilterChange = (filter: string | null) => {
+		setSelectedFilter(filter)
+		setPage(1)
+	}
+
 	return (
 		<>
-			<Header />
+			<Header selectedFilter={selectedFilter} setSelectedFilter={handleFilterChange} />
 			<SafeAreaView className='bg-zinc-800 flex-1'>
 				<FlatList
 					data={anime}
