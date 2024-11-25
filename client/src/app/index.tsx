@@ -1,11 +1,13 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native'
+import Header from '../components/Header'
 
 const HomeScreen = () => {
 	return (
-		<View className='mt-20'>
-			<Text className='text-red-500'>index</Text>
-		</View>
+		<>
+			<Header />
+			<SafeAreaView className='bg-zinc-800 flex-1'></SafeAreaView>
+		</>
 	)
 }
 
