@@ -21,7 +21,7 @@ const AnimeListItem = ({ anime }: { anime: IAnime }) => {
 					</View>
 					<View className='flex-row gap-1'>
 						<View className='bg-zinc-600 p-1 items-center rounded-md'>
-							<Text className='text-white'>{anime.year}</Text>
+							<Text className='text-white'>{anime.aired.prop.from.year}</Text>
 						</View>
 						<View className='bg-zinc-600 p-1 items-center rounded-md'>
 							<Text className='text-white'>{anime.type}</Text>

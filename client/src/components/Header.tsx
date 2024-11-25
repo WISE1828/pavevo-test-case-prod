@@ -6,16 +6,19 @@ import FilterModal from './FilterModal'
 interface HeaderProps {
 	selectedFilter: string | null
 	setSelectedFilter: (filter: string | null) => void
+	dateRange: { from: string; to: string }
+	setDateRange: (range: { from: string; to: string }) => void
 }
 
-const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter }) => {
+const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, dateRange, setDateRange }) => {
 	const [modalVisible, setModalVisible] = useState(false)
+
+	const isDateRangeActive = dateRange.from !== '' && dateRange.to !== ''
 
 	return (
 		<View className='bg-zinc-700 pt-20 p-3 flex-row gap-3'>
 			<Pressable
-				className={`w-12 aspect-square rounded-xl items-center justify-center ${selectedFilter ? 'bg-blue-600' : 'bg-zinc-600'
-					}`}
+				className={`w-12 aspect-square rounded-xl items-center justify-center ${selectedFilter || isDateRangeActive ? 'bg-blue-600' : 'bg-zinc-600'}`}
 				onPress={() => setModalVisible(true)}
 			>
 				<FontAwesome name='filter' size={24} color='white' />
@@ -37,6 +40,8 @@ const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter }) =>
 				setModalVisible={setModalVisible}
 				selectedFilter={selectedFilter}
 				setSelectedFilter={setSelectedFilter}
+				dateRange={dateRange}
+				setDateRange={setDateRange}
 			/>
 		</View>
 	)
