@@ -13,14 +13,15 @@ const HomeScreen = () => {
 	const [selectedFilter, setSelectedFilter] = useState<string | null>(null)
 	const [dateRange, setDateRange] = useState<{ from: string; to: string }>({ from: '', to: '' })
 	const [hasMore, setHasMore] = useState(true)
+	const [searchQuery, setSearchQuery] = useState<string>('')
 
 	const fetchData = useCallback(
-		_.debounce(async (page: number, type: string | null, dateRange: { from: string; to: string }) => {
+		_.debounce(async (page: number, type: string | null, dateRange: { from: string; to: string }, query: string) => {
 			if (!hasMore) return
 
 			setLoading(true)
 			try {
-				const animeData = await fetchAnime(page, type, dateRange)
+				const animeData = await fetchAnime(page, type, dateRange, query)
 				if (animeData.length === 0) {
 					setHasMore(false)
 				} else {
@@ -37,8 +38,8 @@ const HomeScreen = () => {
 
 	useEffect(() => {
 		setHasMore(true)
-		fetchData(page, selectedFilter, dateRange)
-	}, [page, selectedFilter, dateRange, fetchData])
+		fetchData(page, selectedFilter, dateRange, searchQuery)
+	}, [page, selectedFilter, dateRange, searchQuery, fetchData])
 
 	const handleLoadMore = () => {
 		if (!loading && hasMore) {
@@ -53,7 +54,8 @@ const HomeScreen = () => {
 				setSelectedFilter={setSelectedFilter}
 				dateRange={dateRange}
 				setDateRange={setDateRange}
-				setPage={setPage} // Передаем функцию для сброса страницы
+				setPage={setPage}
+				setSearchQuery={setSearchQuery}
 			/>
 			<SafeAreaView className='bg-zinc-800 flex-1'>
 				<FlatList

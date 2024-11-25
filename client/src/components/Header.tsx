@@ -8,10 +8,11 @@ interface HeaderProps {
 	setSelectedFilter: (filter: string | null) => void
 	dateRange: { from: string; to: string }
 	setDateRange: (range: { from: string; to: string }) => void
-	setPage: (page: number) => void // Добавлено для сброса страницы
+	setPage: (page: number) => void
+	setSearchQuery: (query: string) => void
 }
 
-const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, dateRange, setDateRange, setPage }) => {
+const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, dateRange, setDateRange, setPage, setSearchQuery }) => {
 	const [modalVisible, setModalVisible] = useState(false)
 
 	const isDateRangeActive = dateRange.from !== '' && dateRange.to !== ''
@@ -28,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, date
 				<TextInput
 					className='h-12 bg-zinc-600 rounded-xl pl-11 text-white font-normal placeholder:text-zinc-300'
 					placeholder='Search'
+					onChangeText={setSearchQuery}
 				/>
 				<FontAwesome
 					className='absolute top-2.5 left-2.5'
@@ -43,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, date
 				setSelectedFilter={setSelectedFilter}
 				dateRange={dateRange}
 				setDateRange={setDateRange}
-				setPage={setPage} // Передаем функцию для сброса страницы
+				setPage={setPage}
 			/>
 		</View>
 	)
