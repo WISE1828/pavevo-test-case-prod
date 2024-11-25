@@ -19,6 +19,7 @@ interface ModalProps {
 	setSelectedFilter: (filter: string | null) => void
 	dateRange: { from: string; to: string }
 	setDateRange: (range: { from: string; to: string }) => void
+	setPage: (page: number) => void // Добавлено для сброса страницы
 }
 
 const FilterModal: React.FC<ModalProps> = ({
@@ -28,6 +29,7 @@ const FilterModal: React.FC<ModalProps> = ({
 	setSelectedFilter,
 	dateRange,
 	setDateRange,
+	setPage, // Получаем функцию для сброса страницы
 }) => {
 	const [localFilter, setLocalFilter] = useState<string | null>(selectedFilter)
 	const [localDateRange, setLocalDateRange] = useState(dateRange)
@@ -47,6 +49,7 @@ const FilterModal: React.FC<ModalProps> = ({
 			setError(false)
 			setSelectedFilter(localFilter)
 			setDateRange({ from: localDateRange.from, to: toYear })
+			setPage(1) // Сбрасываем страницу до 1
 			setModalVisible(false)
 		}
 	}
@@ -54,10 +57,11 @@ const FilterModal: React.FC<ModalProps> = ({
 	const resetFilters = () => {
 		setLocalFilter(null)
 		setLocalDateRange({ from: '', to: '' })
-		setModalVisible(false)
 		setSelectedFilter(null)
 		setDateRange({ from: '', to: '' })
 		setError(false)
+		setPage(1)
+		setModalVisible(false)
 	}
 
 	return (
@@ -118,7 +122,6 @@ const FilterModal: React.FC<ModalProps> = ({
 					</Pressable>
 				</SafeAreaView>
 			</TouchableWithoutFeedback>
-
 		</Modal>
 	)
 }

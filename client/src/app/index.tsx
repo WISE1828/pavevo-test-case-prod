@@ -31,12 +31,12 @@ const HomeScreen = () => {
 			} finally {
 				setLoading(false)
 			}
-		}, 300), // 300ms debounce
+		}, 300),
 		[hasMore]
 	)
 
 	useEffect(() => {
-		setHasMore(true) // Reset hasMore when filters change
+		setHasMore(true)
 		fetchData(page, selectedFilter, dateRange)
 	}, [page, selectedFilter, dateRange, fetchData])
 
@@ -53,12 +53,12 @@ const HomeScreen = () => {
 				setSelectedFilter={setSelectedFilter}
 				dateRange={dateRange}
 				setDateRange={setDateRange}
+				setPage={setPage} // Передаем функцию для сброса страницы
 			/>
 			<SafeAreaView className='bg-zinc-800 flex-1'>
 				<FlatList
 					data={anime}
 					renderItem={({ item }) => <AnimeListItem anime={item} />}
-
 					onEndReached={handleLoadMore}
 					onEndReachedThreshold={0.5}
 					ListFooterComponent={loading ? <ActivityIndicator size="large" color="#3f3f46" /> : null}

@@ -8,9 +8,10 @@ interface HeaderProps {
 	setSelectedFilter: (filter: string | null) => void
 	dateRange: { from: string; to: string }
 	setDateRange: (range: { from: string; to: string }) => void
+	setPage: (page: number) => void // Добавлено для сброса страницы
 }
 
-const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, dateRange, setDateRange }) => {
+const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, dateRange, setDateRange, setPage }) => {
 	const [modalVisible, setModalVisible] = useState(false)
 
 	const isDateRangeActive = dateRange.from !== '' && dateRange.to !== ''
@@ -42,6 +43,7 @@ const Header: React.FC<HeaderProps> = ({ selectedFilter, setSelectedFilter, date
 				setSelectedFilter={setSelectedFilter}
 				dateRange={dateRange}
 				setDateRange={setDateRange}
+				setPage={setPage} // Передаем функцию для сброса страницы
 			/>
 		</View>
 	)
